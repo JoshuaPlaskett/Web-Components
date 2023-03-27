@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Web Components</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        font-size:16px;
+      }
+      
+      h2{
+        color: purple;
+      }
+    </style>
+    
+  
+</head>
+<body>
+    <custom-carousel title="Portfolio" images="
+      https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Hello_Web_Series_%28Wordmark%29_Logo.png/1200px-Hello_Web_Series_%28Wordmark%29_Logo.png,
+      https://img.freepik.com/free-vector/hello-wording-comic-speech-bubble-pop-art-style_1150-39959.jpg
+      ">
+    </custom-carousel>
+    <h1 style="margin:auto; width:80%; text-align: center;">Meet the team</h1>
+    <div style="display:flex; justify-content: space-around; width:80%;margin:auto;"><custom-profile-card profile-name="John Doe" profile-image="https://www.w3schools.com/w3images/team2.jpg" profile-description="A really great guy" profile-status="Amazing man">
+        </custom-profile-card>
+        <custom-profile-card profile-name="Tim Doe" profile-image="https://www.w3schools.com/w3images/team2.jpg" profile-description="A really great guy" profile-status="Amazing man">
+        </custom-profile-card>
+    </div>
+     <!-- scripts -->
+  <script src="../Carousel/carousel.js"></script> 
+  <script src="../ProfileCard/profilecard.js"></script>
+    
+</body>
+</html>
