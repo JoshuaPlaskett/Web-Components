@@ -48,11 +48,7 @@ class ProfileCard extends HTMLElement{
             <h1>${this.getAttribute('profile-name')}</h1>
             <p class="title">${this.getAttribute('profile-status')}</p>
             <p>${this.getAttribute('profile-description')}</p>
-            <a href="#"><i class="fa fa-dribbble"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <p><button>Contact</button></p>
+            <p><button onlick="${this.getAttribute('button-action')}">${this.getAttribute('button-text')}</button></p>
         </div>
       `;
   
