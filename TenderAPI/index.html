@@ -23,6 +23,20 @@
       .opportunityContainer > .op {
         margin: 5px;
       }
+
+      .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
     </style>
     
     <script>
@@ -34,19 +48,27 @@
         var tokenRequestURL = 'https://www.contractsfinder.service.gov.uk/Token';
         var x = new XMLHttpRequest();
         x.open('POST',tokenRequestURL);
-        x.onload = x.onerror = function() {
-          printResult(
+/*         x.onload = x.onerror = function() {
+          processToken(
             (x.responseText || '')
           );
-        };
+        }; */
         x.setRequestHeader('Authorisation','tester:test');
-        x.setRequestHeader('Access-Control-Allow-Origin',"https://joshuaplaskett.github.io")
+        x.setRequestHeader('Access-Control-Allow-Origin',"*");
+        x.setRequestHeader('access-control-allow-methods','POST, GET');
+
         x.send({
           "grant_type":"client_credentials"
+        }, function processToken(result){
+          console.log(result);
+          submitRequest();
+          console.log("Submitting");
         });
+
+        submitRequest();
       }
       var tenders;
-      var cors_api_url = 'http://thingproxy.freeboard.io/fetch/';
+      var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
       function doCORSRequest(options, printResult) {
         var x = new XMLHttpRequest();
         x.open(options.method, cors_api_url + options.url);
@@ -104,7 +126,7 @@
             "size": 10
           }
         }, function printResult(result) {
-          console.log(result);
+          document.getElementById("loader").style.display="none"; 
           var jsonResult = JSON.parse(result);
           tenders = jsonResult.releases;
           console.log("Opportunity Count: " + tenders.length);
@@ -135,24 +157,15 @@
 </head>
 <body onload=init()>
   <div id="top">
-    CORS Anywhere demo • <a href="https://github.com/Rob--W/cors-anywhere/">Github</a> • <a href="http://cors-anywhere.herokuapp.com">Live server</a>.
     <label>
-      Url to be fetched (example: <a href="//robwu.nl/dump.php">robwu.nl/dump.php</a>)
-      <input type="url" id="url" value="">
-    </label>
-    <label>
-      If using POST, enter the data:
-      <input type="text" id="data">
-    </label>
-    <label>
-      <button id="post" onclick="submitRequest()">POST</button>
+      <button id="post" onclick="submitRequest()">Refresh</button>
     </label>
   </div>
   <div id="bottom">
-    <textarea id="output"></textarea>
   </div>
     <h1 style="margin:auto; width:80%; text-align: center;">Opportunities</h1>
     <div id="opportunitiesContainer" class="opportunityContainer">
+      <div id="loader" class="loader"></div>
     </div>
      <!-- scripts -->
   <script src="../Carousel/carousel.js"></script> 
