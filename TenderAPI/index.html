@@ -40,7 +40,7 @@
           );
         };
         x.setRequestHeader('Authorisation','tester:test');
-        x.setRequestHeader('Access-Control-Allow-Origin',"https://joshuaplaskett.github.io")
+        x.setRequestHeader('Access-Control-Allow-Origin',"*")
         x.send({
           "grant_type":"client_credentials"
         });
