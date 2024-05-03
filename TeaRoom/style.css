@@ -1,0 +1,54 @@
+body {
+    margin:0;
+    font-size:16px;
+}
+
+.navbar {
+    position:sticky;
+    top:0px;
+    width:80%;
+    margin:0;
+    padding: 30px 10%;
+    display:flex;
+    align-items:center;
+    z-index:1;
+}
+
+.navbar > a {
+    display:inline-block;
+    cursor:pointer;
+    background-color: white;
+    padding:10px 50px;
+    transition: "background-color" 0.2ms ease;
+}
+
+.navbar > img {
+    max-width:200px;
+}
+
+.navbar > a:hover {
+    background-color: aquamarine;
+}
+
+.hero {
+    width:100%;
+}
+
+.hero > img {
+    width:100%;
+    overflow: hidden;
+}
+
+.split-content {
+    display:flex;
+    justify-content: space-around;
+}
+
+.split-content > .left {
+    border-radius:5px;
+    background-color: #232323;
+    color:white;
+    padding:15px;
+    width:40%;
+    margin:10px;
+}
