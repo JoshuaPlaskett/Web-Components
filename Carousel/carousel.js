@@ -1,15 +1,19 @@
 
 class Carousel extends HTMLElement{
-  constructor(){
+  constructor()
+  {
     super();
     const shadow = this.attachShadow({ mode: 'open'});
 
     const style = document.createElement("style");
-    let slideIndex = 1;
+    var slideIndex = 0;
     style.textContent = `
+    h1 {
+      font-weight:normal;
+      letter-spacing:2px;
+      color:var(--primary-color);
+    }
     .carousel {
-      font-family: sans-serif;
-      background: #f4f6f7;
       position: relative;
       margin: auto;
       display: grid;
@@ -18,9 +22,8 @@ class Carousel extends HTMLElement{
     }
   
     .gallery {
-      width:500px;
-      height:500px;
-      border:1px solid black;
+      width:100%;
+      
       overflow:hidden;
       margin:auto;
     }
@@ -31,8 +34,6 @@ class Carousel extends HTMLElement{
     }
   
     .gallery > div > img {
-      max-width:500px;
-      max-height:500px;
       width:100%;
     }
   
@@ -40,9 +41,10 @@ class Carousel extends HTMLElement{
       display: flex;
       justify-content: space-between;
       position: absolute;
-      width: 500px;
+      width: 120%;
       height: 500px;
       align-items: center;
+      left:-10%;
     }
   
     /* Next & previous buttons */
@@ -50,7 +52,7 @@ class Carousel extends HTMLElement{
       cursor: pointer;
       position: absolute;
       top: 50%;
-      width: auto;
+      width: 30px;
       margin-top: -22px;
       padding: 16px;
       color: white;
@@ -60,17 +62,32 @@ class Carousel extends HTMLElement{
       border-radius: 0 3px 3px 0;
       user-select: none;
     }
+
+    .prev {
+      transform:rotate(180deg);
+    }
+
+    .prev > img, .next > img {
+      width:100%;
+    }
   
     /* Position the "next button" to the right */
     .next {
       right: 0;
       border-radius: 3px 0 0 3px;
     }
-  
-    /* On hover, add a black background color with a little bit see-through */
-    .prev:hover, .next:hover {
-      background-color: rgba(0,0,0,0.8);
+
+    .playButton {
+      border:1px solid var(--tersary-color);
+      margin:1rem auto ;
+      max-width:200px;
+      padding:0.1rem;
+      width:10%;
+      min-width:100px;
+      cursor:pointer;
+      selectable:none;
     }
+  
   
     /* Caption text */
     .text {
@@ -129,14 +146,20 @@ class Carousel extends HTMLElement{
     `;
     let template = document.createElement("template");
     template.innerHTML = `
-    <div class="carousel"> 
+    <div class="carousel" onload="initGallery()"> 
       <div>
-        <h3 id='title'></h3>
+        <h1 id='title'></h1>
+        <div id="pause-play" class="playButton">PLAY
+        </div>
         <div id="gallery" class="gallery" name="gallery">
         <!-- Next and previous buttons -->
         <div class="arrows_container">
-          <a id="prev" class="prev" onclick="plusSlides(-1)">&#10094;</a>
-          <a id="next" class="next" onclick="plusSlides(1)">&#10095;</a>
+          <a id="prev" class="prev" onclick="plusSlides(-1)">
+            <img src="./images/arrow.svg"/>
+          </a>
+          <a id="next" class="next" onclick="plusSlides(1)">
+            <img src="./images/arrow.svg"/>
+          </a>
         </div>
         </div>
         <div id="dot_container" style="text-align:center">
@@ -147,7 +170,8 @@ class Carousel extends HTMLElement{
 
     var script = document.createElement('script');
     script.textContent = `
-    let slideIndex = 1;`;
+    let slideIndex = 0;
+    `;
 
     shadow.appendChild(template.content.cloneNode(true));
     shadow.appendChild(style);
@@ -156,48 +180,96 @@ class Carousel extends HTMLElement{
     shadow.querySelector("#next").onclick = () => {
       let slides = shadow.querySelectorAll("#slide");
       let dots = shadow.querySelectorAll("#dot");
+      clearInterval(slideInterval);
+      slideInterval = setInterval(() => {
+        let slides = shadow.querySelectorAll("#slide");
+        let dots = shadow.querySelectorAll("#dot");
+        this.changeSlide(1,slides, dots);
+      }, 5000);
       this.changeSlide(1, slides, dots);
     }
 
     shadow.querySelector("#prev").onclick = () => {
       let slides = shadow.querySelectorAll("#slide");
       let dots = shadow.querySelectorAll("#dot");
+      clearInterval(slideInterval);
+      slideInterval = setInterval(() => {
+        let slides = shadow.querySelectorAll("#slide");
+        let dots = shadow.querySelectorAll("#dot");
+        this.changeSlide(1,slides, dots);
+      }, 5000);
       this.changeSlide(-1, slides, dots);
+    }
+
+    shadow.querySelector("#pause-play").onclick = () => {
+      if(!slideInterval)
+      {
+        slideInterval = setInterval(() => {
+          let slides = shadow.querySelectorAll("#slide");
+          let dots = shadow.querySelectorAll("#dot");
+          this.changeSlide(1,slides, dots);
+        }, 5000);
+      }
+      else
+      {
+        clearInterval(slideInterval);
+        slideInterval = null;
+      }
     }
 
 
     shadow.getElementById('title').innerText = this.getAttribute('title');
     var imagesString = this.getAttribute('images');
-    var imagesArray = imagesString.split(",")
+    var imagesArray = imagesString.split(",");
+    var captionString = this.getAttribute('captions');
+    var captionArray = captionString.split("/#");
     let index = 0;
     imagesArray.forEach(image => {
       var imageDiv = document.createElement("div");
       imageDiv.id = "slide";
       var imageNode = document.createElement("img");
       var imageCaption = document.createElement("p");
-      imageCaption.innerText = "Hey";
+      
+      imageCaption.innerText = "";
       imageNode.src = image;
       imageDiv.className = "mySlides fade";
       
       imageDiv.appendChild(imageNode);
       imageDiv.appendChild(imageCaption);
       shadow.getElementById('gallery').appendChild(imageDiv);
-
-      let dotNode = document.createElement("span");
-      dotNode.id = "dot";
-      dotNode.className = "dot";
-      dotNode.onclick = (index) => {
-        let slides = shadow.querySelectorAll("#slide");
-        let dots = shadow.querySelectorAll("#dot");
-        this.setSlide(index, slides, dots);
+      if(this.getAttribute("showDots"))
+      {
+          let dotNode = document.createElement("span");
+          dotNode.id = "dot";
+          dotNode.className = "dot";
+          dotNode.onclick = (index) => {
+          let slides = shadow.querySelectorAll("#slide");
+          let dots = shadow.querySelectorAll("#dot");
+          this.setSlide(index, slides, dots);
+          }
+  
+          shadow.getElementById("dot_container").append(dotNode);
       }
-
-      shadow.getElementById("dot_container").append(dotNode);
       index++;
       });
 
     shadow.getElementById('gallery').lastChild.className += " active";
     shadow.appendChild(script);
+
+    // Update count when element content changes
+    var slideInterval = setInterval(() => {
+      let slides = shadow.querySelectorAll("#slide");
+      let dots = shadow.querySelectorAll("#dot");
+      this.changeSlide(1,slides, dots);
+    }, 5000);
+  }
+
+  initGallery()
+  {
+    let slides = shadow.querySelectorAll("#slide");
+    let dots = shadow.querySelectorAll("#dot");
+    this.setSlide(0, slides, dots);
+    
   }
 
   changeSlide(n, slides, dots)
@@ -209,7 +281,8 @@ class Carousel extends HTMLElement{
     else if(slideIndex < 0)
       slideIndex = slides.length-1;
     slides[slideIndex].style.display = "block";
-    dots[slideIndex].className += " dotActive";
+    if(dots.length>0)
+      dots[slideIndex].className += " dotActive";
   }
 
   setSlide(n, slides, dots)
@@ -217,7 +290,8 @@ class Carousel extends HTMLElement{
     this.resetSlides(slides);
     slideIndex = n;
     slides[slideIndex].style.display = "block";
-    dots[slideIndex].className += " dotActive";
+    if(dots.length>0)
+      dots[slideIndex].className += " dotActive";
   }
 
   resetSlides(slides, dots)
@@ -226,7 +300,8 @@ class Carousel extends HTMLElement{
     for (i = 0; i < slides.length; i++)
     {
       slides[i].style.display = "none";
-      dots[i].className = dots[i].className.replace(" dotActive","");
+      if(dots.length>0)
+          dots[i].className = dots[i].className.replace(" dotActive","");
     }
   }
 
