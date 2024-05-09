@@ -44,6 +44,11 @@ nav > a:hover {
     color:var(--tersary-color);
 }
 
+.dark-mode {
+  background-color:var(--primary-color);
+  color:var(--primary-bg) !important;
+}
+
 .dropdown {
     float: left;
     overflow: hidden;

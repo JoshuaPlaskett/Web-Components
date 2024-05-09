@@ -173,7 +173,12 @@ class Carousel extends HTMLElement{
     let slideIndex = 0;
     `;
 
+    let lnk = document.createElement("link");
+    lnk.rel = "stylesheet";
+    lnk.href = "../base.css";
+
     shadow.appendChild(template.content.cloneNode(true));
+    shadow.appendChild(lnk);
     shadow.appendChild(style);
     
     
@@ -221,8 +226,12 @@ class Carousel extends HTMLElement{
     shadow.getElementById('title').innerText = this.getAttribute('title');
     var imagesString = this.getAttribute('images');
     var imagesArray = imagesString.split(",");
+
     var captionString = this.getAttribute('captions');
-    var captionArray = captionString.split("/#");
+    var captionArray = [];
+    console.log(captionString);
+    if(captionString !== null)
+      captionArray = captionString.split("/#");
     let index = 0;
     imagesArray.forEach(image => {
       var imageDiv = document.createElement("div");

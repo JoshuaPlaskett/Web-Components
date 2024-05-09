@@ -7,6 +7,7 @@ class ExtendableTemplate extends HTMLElement{
 
     const style = document.createElement("style");
     style.textContent = `
+      @import url( '../base.css' )
     h2
      {
       font-weight:normal;
@@ -26,7 +27,12 @@ class ExtendableTemplate extends HTMLElement{
     
     `;
 
+    let lnk = document.createElement("link");
+    lnk.rel = "stylesheet";
+    lnk.href = "../base.css";
+
     shadow.appendChild(template.content.cloneNode(true));
+    shadow.appendChild(lnk);
     shadow.appendChild(style);
 
     shadow.getElementById('title').innerText = this.getAttribute('title');

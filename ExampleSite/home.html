@@ -2,35 +2,36 @@
 <html lang="en">
 <head>
     <title>Web Components</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        font-size:16px;
-      }
-      
-      h2{
-        color: purple;
-      }
-    </style>
-    
+    <link href="../base.css" rel="stylesheet"/>
   
 </head>
 <body>
-    <custom-carousel title="Portfolio" images="
-      https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Hello_Web_Series_%28Wordmark%29_Logo.png/1200px-Hello_Web_Series_%28Wordmark%29_Logo.png,
-      https://img.freepik.com/free-vector/hello-wording-comic-speech-bubble-pop-art-style_1150-39959.jpg
-      ">
-    </custom-carousel>
-    <h1 style="margin:auto; width:80%; text-align: center;">Meet the team</h1>
-    <div style="display:flex; justify-content: space-around; width:80%;margin:auto;">
-      <custom-profile-card profile-name="John Doe" profile-image="https://www.w3schools.com/w3images/team2.jpg" profile-description="A really great guy" profile-status="Amazing man">
-        </custom-profile-card>
-        <custom-profile-card profile-name="Tim Doe" profile-image="https://www.w3schools.com/w3images/team2.jpg" profile-description="A really great guy" profile-status="Amazing man">
-        </custom-profile-card>
-    </div>
-     <!-- scripts -->
-  <script src="../Carousel/carousel.js"></script> 
-  <script src="../ProfileCard/profilecard.js"></script>
+  <custom-header logo="./images/logo.svg" nav-items='[{"text":"Home","link":"./home.html"},{"text":"About","link":"./carousel.html"},{"text":"TEST","link":"./carousel.html"}]'></custom-header>
+  <custom-carousel title="" images="
+    https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Hello_Web_Series_%28Wordmark%29_Logo.png/1200px-Hello_Web_Series_%28Wordmark%29_Logo.png,
+    https://img.freepik.com/free-vector/hello-wording-comic-speech-bubble-pop-art-style_1150-39959.jpg
+    ">
+  </custom-carousel>
+  <h1 style="margin:auto; width:80%; text-align: center;">Meet the team</h1>
+  <div style="display:flex; justify-content: space-around; width:80%;margin:auto;">
+    <custom-profile-card profile-name="John Doe" profile-image="https://www.w3schools.com/w3images/team2.jpg" profile-description="A really great guy" profile-status="Amazing man">
+      </custom-profile-card>
+      <custom-profile-card profile-name="Tim Doe" profile-image="https://www.w3schools.com/w3images/team2.jpg" profile-description="A really great guy" profile-status="Amazing man">
+      </custom-profile-card>
+  </div>
+    <!-- scripts -->
+  <script src="../Components/carousel.js"></script> 
+  <script src="../Components/profilecard.js"></script>
+  <script src="../Components/customHeader.js"></script>
+  <script>
+    let lnk = document.createElement("link");
+    lnk.rel = "stylesheet";
+    lnk.href = "../base.css";
+
+    let customElement = document.querySelector("custom-header");
+    //customElement.shadowRoot.insertBefore(lnk, customElement.shadowRoot.firstChild);
+    
+  </script>
     
 </body>
 </html>

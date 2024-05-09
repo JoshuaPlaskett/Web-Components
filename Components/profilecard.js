@@ -14,7 +14,7 @@ class ProfileCard extends HTMLElement{
       }
       
       .title {
-        color: grey;
+        color: var(--primary-color);
         font-size: 18px;
       }
       
@@ -23,8 +23,8 @@ class ProfileCard extends HTMLElement{
         outline: 0;
         display: inline-block;
         padding: 8px;
-        color: white;
-        background-color: #000;
+        color: var(--primary-bg);
+        background-color: var(--tersary-color);
         text-align: center;
         cursor: pointer;
         width: 100%;
@@ -52,7 +52,12 @@ class ProfileCard extends HTMLElement{
         </div>
       `;
   
+      let lnk = document.createElement("link");
+      lnk.rel = "stylesheet";
+      lnk.href = "../base.css";
+
       shadow.appendChild(template.content.cloneNode(true));
+      shadow.appendChild(lnk);
       shadow.appendChild(style);
       
       
