@@ -22,7 +22,7 @@ class Carousel extends HTMLElement{
     }
   
     .gallery {
-      width:100%;
+      width:80%;
       
       overflow:hidden;
       margin:auto;
@@ -35,6 +35,27 @@ class Carousel extends HTMLElement{
   
     .gallery > div > img {
       width:100%;
+    }
+
+    .gallery > div > p {
+      text-align:center;
+    }
+
+    .caption-overlay
+    {
+      color:var(--primary-bg);
+      position:absolute;
+      top:40%;
+      left:50%;
+      transform:translate(-50%);
+      width:60%;
+      font-size:2rem;
+    }
+
+    .caption-container
+    {
+      background:rgba(0,0,0,0.4);
+      padding:25px;
     }
   
     .arrows_container {
@@ -86,6 +107,7 @@ class Carousel extends HTMLElement{
       min-width:100px;
       cursor:pointer;
       selectable:none;
+      text-align:center;
     }
   
   
@@ -206,6 +228,11 @@ class Carousel extends HTMLElement{
       this.changeSlide(-1, slides, dots);
     }
 
+    if(!this.getAttribute('show-play'))
+    {
+      shadow.querySelector("#pause-play").style.display = "none";
+    }
+
     shadow.querySelector("#pause-play").onclick = () => {
       if(!slideInterval)
       {
@@ -232,14 +259,24 @@ class Carousel extends HTMLElement{
     console.log(captionString);
     if(captionString !== null)
       captionArray = captionString.split("/#");
+    console.log(captionArray);
     let index = 0;
     imagesArray.forEach(image => {
       var imageDiv = document.createElement("div");
       imageDiv.id = "slide";
       var imageNode = document.createElement("img");
       var imageCaption = document.createElement("p");
-      
-      imageCaption.innerText = "";
+      imageCaption.innerText = captionArray[index];
+      console.log(this.getAttribute("caption-overlay"));
+      if(this.getAttribute("caption-overlay"))
+      {
+        if(this.getAttribute("caption-container"))
+        {
+          imageCaption.className += " caption-container";
+        }
+        imageCaption.className += " caption-overlay";
+      }
+
       imageNode.src = image;
       imageDiv.className = "mySlides fade";
       
